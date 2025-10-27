@@ -1,16 +1,43 @@
-# React + Vite
+# AI Easy Easy v2 🤖
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Multi-user AI generation platform with Firebase authentication, smart pricing, and comprehensive user management.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **🔐 Multi-user Authentication**: Firebase Auth with email/password and Google OAuth
+- **🎨 Image Generation**: Multiple AI models (FLUX, Nanobanana, Seedream) with reference image support  
+- **🎬 Video Generation**: Seedance and Minimax models with frame image support
+- **💰 Smart Pricing**: Dynamic pricing with Thai Baht conversion and per-model configuration
+- **📊 Admin Dashboard**: User analytics, financial reports, and system monitoring
+- **🖼️ Private Gallery**: Personal generation history with search and filtering
+- **📱 Responsive Design**: Modern UI with Tailwind CSS
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React 19 + Vite
+- **Authentication**: Firebase Auth
+- **Database**: Firestore
+- **AI APIs**: Runware API integration
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
 
-## Expanding the ESLint configuration
+## 🚀 Quick Start
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Copy `.env.example` to `.env` and add your API keys
+4. Run development server: `npm run dev`
+
+## 🌐 Environment Variables
+
+```env
+VITE_RUNWARE_API_KEY=your_runware_api_key
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+# ... see .env.example for full list
+```
+
+## 📝 License
+
+MIT License - Built with ❤️ for the AI community
