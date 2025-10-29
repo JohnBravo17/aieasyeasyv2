@@ -105,8 +105,8 @@ const ImageGenerator = () => {
     const files = Array.from(event.target.files)
     if (files.length === 0) return
 
-    // For Nanobanana, support multiple images
-    if (model === 'Nanobanana') {
+    // For Nanobanana and Seedream 4.0, support multiple images
+    if (model === 'Nanobanana' || model === 'Seedream 4.0') {
       const validFiles = []
       const previews = []
 
@@ -439,8 +439,8 @@ const ImageGenerator = () => {
           </div>
         )}
 
-        {/* Reference Image Upload (for Nanobanana - multiple images) */}
-        {model === 'Nanobanana' && (
+        {/* Reference Image Upload (for Nanobanana and Seedream 4.0 - multiple images) */}
+        {(model === 'Nanobanana' || model === 'Seedream 4.0') && (
           <div>
             <label className="block text-sm font-medium mb-2">Reference Images (Optional - up to 10)</label>
             {(!Array.isArray(referenceImagePreview) || referenceImagePreview.length === 0) ? (
@@ -520,7 +520,9 @@ const ImageGenerator = () => {
               </div>
             )}
             <p className="text-xs text-gray-400 mt-1">
-              Multiple reference images will be combined to guide the generated output. Great for image editing and style mixing.
+              {model === 'Nanobanana' 
+                ? 'Multiple reference images will be combined to guide the generated output. Great for image editing and style mixing.'
+                : 'Multiple reference images will be used for sequential storytelling and enhanced image generation.'}
             </p>
           </div>
         )}

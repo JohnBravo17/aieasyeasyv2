@@ -10,6 +10,7 @@ class Seedream40Model extends BaseImageModel {
       credits: '~2 credits',
       features: [
         'sequential_generation',
+        'multiple_reference_images',
         'reference_image',
         'storytelling',
         'high_quality'
@@ -51,44 +52,85 @@ class Seedream40Model extends BaseImageModel {
   }
 
   async processReferenceImages(referenceImage, referenceImages = []) {
-    if (!referenceImage) return null
+    const allImages = []
+    
+    // Add single reference image if provided
+    if (referenceImage) {
+      allImages.push(referenceImage)
+    }
+    
+    // Add multiple reference images if provided
+    if (referenceImages && referenceImages.length > 0) {
+      allImages.push(...referenceImages)
+    }
+
+    if (allImages.length === 0) return null
 
     try {
-      console.log('🖼️ [Seedream 4.0] Processing reference image for sequential generation')
+      console.log(`🖼️ [Seedream 4.0] Processing ${allImages.length} reference image(s) for sequential generation`)
+      console.log(`🔑 [Seedream 4.0] API Key status:`, this.apiKey ? 'Present' : 'Missing')
       
-      const imageBase64 = await this.fileToBase64(referenceImage)
-      
-      // Use direct HTTP for image upload
-      const uploadRequest = {
-        taskType: "imageUpload",
-        taskUUID: this.generateUUID(),
-        image: imageBase64
-      }
+      const uploadPromises = allImages.map(async (image, index) => {
+        console.log(`📤 [Seedream 4.0] Converting image ${index + 1} to base64...`)
+        const imageBase64 = await this.fileToBase64(image)
+        
+        console.log(`📤 [Seedream 4.0] Uploading reference image ${index + 1}...`)
+        
+        const uploadRequest = {
+          taskType: "imageUpload",
+          taskUUID: this.generateUUID(),
+          image: imageBase64
+        }
 
-      const response = await fetch("https://api.runware.ai/v1", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${this.apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify([uploadRequest])
+        console.log(`🔍 [Seedream 4.0] Upload request for image ${index + 1}:`, {
+          taskType: uploadRequest.taskType,
+          taskUUID: uploadRequest.taskUUID,
+          imageLength: imageBase64.length,
+          imagePreview: imageBase64.substring(0, 50) + "..."
+        })
+
+        const response = await fetch("https://api.runware.ai/v1", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${this.apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify([uploadRequest])
+        })
+
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error(`❌ [Seedream 4.0] Image ${index + 1} upload failed:`, {
+            status: response.status,
+            statusText: response.statusText,
+            error: errorText
+          })
+          return null
+        }
+
+        const result = await response.json()
+        const uploadData = result.data?.[0]
+        
+        if (uploadData?.imageUUID) {
+          console.log(`✅ [Seedream 4.0] Image ${index + 1} uploaded:`, uploadData.imageUUID)
+          return uploadData.imageUUID.toString()
+        } else {
+          console.warn(`⚠️ [Seedream 4.0] Image ${index + 1} upload failed`)
+          return null
+        }
       })
-
-      if (!response.ok) {
-        throw new Error(`Upload failed: ${response.status}`)
-      }
-
-      const result = await response.json()
-      const uploadData = result.data?.[0]
       
-      if (uploadData?.imageUUID) {
-        console.log('✅ [Seedream 4.0] Reference image uploaded:', uploadData.imageUUID)
-        return [uploadData.imageUUID.toString()]
+      const uploadedUUIDs = await Promise.all(uploadPromises)
+      const validUUIDs = uploadedUUIDs.filter(uuid => uuid !== null)
+      
+      if (validUUIDs.length > 0) {
+        console.log('✅ [Seedream 4.0] Reference image UUIDs:', validUUIDs)
+        return validUUIDs
       }
       
       return null
     } catch (error) {
-      console.error('❌ [Seedream 4.0] Reference image upload failed:', error)
+      console.error('❌ [Seedream 4.0] Reference image processing failed:', error)
       return null
     }
   }
