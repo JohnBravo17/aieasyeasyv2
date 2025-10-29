@@ -1,7 +1,7 @@
 /* Hero Homepage Styles */
 .hero-homepage {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1a1d29;
   color: white;
   overflow-x: hidden;
 }
@@ -13,9 +13,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: #1f2337;
+  border-bottom: 1px solid #2d3142;
 }
 
 .nav-left {
@@ -49,21 +48,22 @@
 }
 
 .notification-btn {
-  background: rgba(255, 255, 255, 0.2);
+  background: #2d3142;
   border: none;
-  border-radius: 50%;
+  border-radius: 8px;
   width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
+  color: #9ca3af;
   transition: all 0.3s ease;
 }
 
 .notification-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #374151;
+  color: white;
   transform: translateY(-1px);
 }
 
@@ -104,12 +104,12 @@
   left: 0;
   width: 320px;
   height: 100vh;
-  background: white;
-  color: #333;
+  background: #1f2337;
+  color: white;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   overflow-y: auto;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .slide-menu.active .menu-content {
@@ -118,8 +118,9 @@
 
 .menu-header {
   padding: 2rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #2d3142;
   color: white;
+  border-bottom: 1px solid #374151;
 }
 
 .user-info {
@@ -131,8 +132,8 @@
 .user-avatar {
   width: 60px;
   height: 60px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: #374151;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,25 +165,27 @@
   gap: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #333;
+  color: #d1d5db;
   font-size: 1rem;
 }
 
 .menu-item:hover {
-  background: #f8f9fa;
+  background: #374151;
+  color: white;
 }
 
 .menu-item.logout {
-  color: #dc3545;
+  color: #ef4444;
 }
 
 .menu-item.logout:hover {
-  background: #fff5f5;
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
 }
 
 .menu-divider {
   height: 1px;
-  background: #e9ecef;
+  background: #374151;
   margin: 0.5rem 0;
 }
 
@@ -196,15 +199,12 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 1rem 0;
-  background: linear-gradient(45deg, #fff, #f0f8ff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white;
 }
 
 .hero-subtitle {
   font-size: 1.1rem;
-  opacity: 0.9;
+  color: #9ca3af;
   margin: 0;
   max-width: 400px;
   margin: 0 auto;
@@ -231,10 +231,9 @@
 }
 
 .service-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  background: #2d3142;
+  border: 1px solid #374151;
+  border-radius: 12px;
   padding: 2rem;
   text-align: center;
   cursor: pointer;
@@ -250,14 +249,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  background: rgba(59, 130, 246, 0.05);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  border-color: #3b82f6;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .service-card:hover::before {
@@ -265,23 +265,26 @@
 }
 
 .service-card.primary {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+  background: #2d3142;
+  border: 1px solid #4f46e5;
 }
 
 .service-card.secondary {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3) 0%, rgba(59, 130, 246, 0.3) 100%);
+  background: #2d3142;
+  border: 1px solid #10b981;
 }
 
 .service-card.tertiary {
-  background: linear-gradient(135deg, rgba(251, 146, 60, 0.3) 0%, rgba(244, 63, 94, 0.3) 100%);
+  background: #2d3142;
+  border: 1px solid #f59e0b;
 }
 
 .service-icon {
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+  background: #374151;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -298,7 +301,7 @@
 }
 
 .service-card p {
-  opacity: 0.9;
+  color: #9ca3af;
   margin: 0;
   position: relative;
   z-index: 1;
@@ -325,10 +328,9 @@
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
+  background: #2d3142;
+  border: 1px solid #374151;
+  border-radius: 12px;
   padding: 1.5rem;
   display: flex;
   align-items: center;
@@ -337,15 +339,16 @@
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  border-color: #3b82f6;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .stat-icon {
   width: 50px;
   height: 50px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  background: #374151;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -356,7 +359,7 @@
   font-size: 0.9rem;
   font-weight: 500;
   margin: 0 0 0.25rem 0;
-  opacity: 0.9;
+  color: #9ca3af;
 }
 
 .stat-number {
