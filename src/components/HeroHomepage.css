@@ -1,8 +1,8 @@
 /* Hero Homepage Styles */
 .hero-homepage {
   min-height: 100vh;
-  background: #1a1d29;
-  color: white;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8f2ff 100%);
+  color: #1e293b;
   overflow-x: hidden;
 }
 
@@ -13,8 +13,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: #1f2337;
-  border-bottom: 1px solid #2d3142;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .nav-left {
@@ -48,7 +49,7 @@
 }
 
 .notification-btn {
-  background: #2d3142;
+  background: rgba(255, 255, 255, 0.8);
   border: none;
   border-radius: 8px;
   width: 44px;
@@ -57,13 +58,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #9ca3af;
+  color: #475569;
   transition: all 0.3s ease;
 }
 
 .notification-btn:hover {
-  background: #374151;
-  color: white;
+  background: white;
+  color: #1e293b;
   transform: translateY(-1px);
 }
 
@@ -104,12 +105,12 @@
   left: 0;
   width: 320px;
   height: 100vh;
-  background: #1f2337;
-  color: white;
+  background: white;
+  color: #1e293b;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   overflow-y: auto;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .slide-menu.active .menu-content {
@@ -118,9 +119,8 @@
 
 .menu-header {
   padding: 2rem 1.5rem;
-  background: #2d3142;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   color: white;
-  border-bottom: 1px solid #374151;
 }
 
 .user-info {
@@ -132,8 +132,8 @@
 .user-avatar {
   width: 60px;
   height: 60px;
-  border-radius: 12px;
-  background: #374151;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,27 +165,27 @@
   gap: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #d1d5db;
+  color: #475569;
   font-size: 1rem;
 }
 
 .menu-item:hover {
-  background: #374151;
-  color: white;
+  background: #f8fafc;
+  color: #1e293b;
 }
 
 .menu-item.logout {
-  color: #ef4444;
+  color: #dc2626;
 }
 
 .menu-item.logout:hover {
-  background: rgba(239, 68, 68, 0.1);
-  color: #f87171;
+  background: #fef2f2;
+  color: #dc2626;
 }
 
 .menu-divider {
   height: 1px;
-  background: #374151;
+  background: #e2e8f0;
   margin: 0.5rem 0;
 }
 
@@ -199,12 +199,12 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 1rem 0;
-  color: white;
+  color: #1e293b;
 }
 
 .hero-subtitle {
   font-size: 1.1rem;
-  color: #9ca3af;
+  color: #64748b;
   margin: 0;
   max-width: 400px;
   margin: 0 auto;
@@ -231,15 +231,16 @@
 }
 
 .service-card {
-  background: #2d3142;
-  border: 1px solid #374151;
-  border-radius: 12px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
   padding: 2rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .service-card::before {
@@ -249,15 +250,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(59, 130, 246, 0.05);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .service-card:hover {
-  transform: translateY(-4px);
-  border-color: #3b82f6;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .service-card:hover::before {
@@ -265,31 +265,29 @@
 }
 
 .service-card.primary {
-  background: #2d3142;
-  border: 1px solid #4f46e5;
+  background: white;
 }
 
 .service-card.secondary {
-  background: #2d3142;
-  border: 1px solid #10b981;
+  background: white;
 }
 
 .service-card.tertiary {
-  background: #2d3142;
-  border: 1px solid #f59e0b;
+  background: white;
 }
 
 .service-icon {
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
-  background: #374151;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
+  color: white;
 }
 
 .service-card h3 {
@@ -298,10 +296,11 @@
   margin: 0 0 0.5rem 0;
   position: relative;
   z-index: 1;
+  color: #1e293b;
 }
 
 .service-card p {
-  color: #9ca3af;
+  color: #64748b;
   margin: 0;
   position: relative;
   z-index: 1;
@@ -328,45 +327,46 @@
 }
 
 .stat-card {
-  background: #2d3142;
-  border: 1px solid #374151;
-  border-radius: 12px;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
   padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  border-color: #3b82f6;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .stat-icon {
   width: 50px;
   height: 50px;
-  background: #374151;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: white;
 }
 
 .stat-content h3 {
   font-size: 0.9rem;
   font-weight: 500;
   margin: 0 0 0.25rem 0;
-  color: #9ca3af;
+  color: #64748b;
 }
 
 .stat-number {
   font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
-  color: #fff;
+  color: #1e293b;
 }
 
 /* Responsive Design */

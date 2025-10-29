@@ -20,16 +20,62 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #374151;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6b7280;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: #94a3b8;
+}
+
+/* Light theme dashboard styles */
+.min-h-screen.bg-gray-900 {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.text-white {
+  color: #1e293b !important;
+}
+
+.bg-gray-900 {
+  background: #f8fafc !important;
+}
+
+.bg-gray-800 {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.bg-gray-700 {
+  background: #f1f5f9 !important;
+}
+
+.border-gray-700 {
+  border-color: #e2e8f0 !important;
+}
+
+.text-gray-300 {
+  color: #64748b !important;
+}
+
+.text-blue-400 {
+  color: #3b82f6 !important;
+}
+
+.hover\:text-blue-300:hover {
+  color: #2563eb !important;
+}
+
+.text-red-400 {
+  color: #dc2626 !important;
+}
+
+.hover\:text-red-300:hover {
+  color: #b91c1c !important;
 }
 
 /* Animation for loading spinner */

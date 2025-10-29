@@ -8,9 +8,13 @@ import PricingDashboard from './components/PricingDashboard'
 import AdminDashboard from './components/admin/AdminDashboard'
 import UserGallery from './components/UserGallery'
 import HeroHomepage from './components/HeroHomepage'
+import LandingPage from './components/LandingPage'
+import Login from './components/Login'
 import './App.css'
 
 function MainApp() {
+  const [showLanding, setShowLanding] = useState(true)
+  const [showLogin, setShowLogin] = useState(false)
   const [activeView, setActiveView] = useState('home') // Start with home view
   const [activeTab, setActiveTab] = useState('image')
   const [isAdmin, setIsAdmin] = useState(false)
@@ -30,9 +34,29 @@ function MainApp() {
   const handleLogout = async () => {
     try {
       await logout()
+      setShowLanding(true)
+      setActiveView('home')
     } catch (error) {
       console.error('Logout error:', error)
     }
+  }
+
+  // If user is not logged in, show landing or login
+  if (!user) {
+    if (showLogin) {
+      return <Login onBack={() => setShowLogin(false)} />
+    }
+    return (
+      <LandingPage 
+        onGetStarted={() => setShowLogin(true)}
+        onSignIn={() => setShowLogin(true)}
+      />
+    )
+  }
+
+  // User is logged in, hide landing page
+  if (showLanding) {
+    setShowLanding(false)
   }
 
   // Show Hero Homepage by default, other views when navigated
