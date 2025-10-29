@@ -9,7 +9,7 @@ import AdminDashboard from './components/admin/AdminDashboard'
 import UserGallery from './components/UserGallery'
 import HeroHomepage from './components/HeroHomepage'
 import LandingPage from './components/LandingPage'
-import Login from './components/Login'
+import Login from './components/auth/Login'
 import './App.css'
 
 function MainApp() {
