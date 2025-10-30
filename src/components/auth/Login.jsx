@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRegister, setIsRegister] = useState(false);
@@ -25,6 +25,10 @@ const Login = () => {
       } else {
         await login(email, password);
       }
+      // Call the success callback to navigate to the app
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
     } catch (error) {
       console.error('Authentication error:', error);
     } finally {
@@ -36,6 +40,10 @@ const Login = () => {
     setIsLoading(true);
     try {
       await loginWithGoogle();
+      // Call the success callback to navigate to the app
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
     } catch (error) {
       console.error('Google login error:', error);
     } finally {
