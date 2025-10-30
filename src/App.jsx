@@ -40,7 +40,7 @@ function AppContent() {
     return (
       <LandingPage 
         onGetStarted={handleGetStarted}
-        onLogin={() => setCurrentView('login')}
+        onSignIn={() => setCurrentView('login')}
       />
     )
   }
@@ -59,7 +59,7 @@ function AppContent() {
   return (
     <LandingPage 
       onGetStarted={handleGetStarted}
-      onLogin={() => setCurrentView('login')}
+      onSignIn={() => setCurrentView('login')}
     />
   )
 }
