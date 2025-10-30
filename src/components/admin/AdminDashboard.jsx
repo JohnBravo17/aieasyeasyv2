@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../services/firebaseConfig';
 import { Users, DollarSign, Activity, TrendingUp, Calendar, Database } from 'lucide-react';
-import PricingTable from './PricingTable';
-import ModelPricingEditor from './ModelPricingEditor';
+import PricingManager from './PricingManager';
 
 const AdminDashboard = () => {
   console.log('🔵 AdminDashboard component is rendering...');
@@ -224,11 +223,8 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Model Pricing Editor */}
-      <ModelPricingEditor />
-
-      {/* Pricing Analysis */}
-      <PricingTable />
+      {/* Comprehensive Pricing Manager */}
+      <PricingManager />
 
       {/* Quick Actions */}
       <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
