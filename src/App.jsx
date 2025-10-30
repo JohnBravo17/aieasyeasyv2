@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Login from './components/auth/Login'
 import LandingPage from './components/LandingPage'
@@ -7,8 +7,9 @@ import './App.css'
 
 function AppContent() {
   const [currentView, setCurrentView] = useState('landing') // landing, login, app
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
 
+  // Auto-navigate based on authentication state
   const handleGetStarted = () => {
     if (user) {
       setCurrentView('app') // Go directly to app if already authenticated
@@ -18,12 +19,21 @@ function AppContent() {
   }
 
   const handleLoginSuccess = () => {
+    console.log('Login success callback triggered')
     setCurrentView('app') // Navigate to authenticated app after successful login
   }
 
   const handleLogout = () => {
     setCurrentView('landing') // Return to landing page after logout
   }
+
+  // Auto-navigate to app when user becomes authenticated
+  React.useEffect(() => {
+    if (user && currentView === 'login') {
+      console.log('User authenticated, navigating to app')
+      setCurrentView('app')
+    }
+  }, [user, currentView])
 
   // Show landing page by default (no authentication required)
   if (currentView === 'landing') {

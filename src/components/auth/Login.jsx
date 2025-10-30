@@ -18,14 +18,20 @@ const Login = ({ onLoginSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log('Login form submitted', { email, isRegister });
 
     try {
       if (isRegister) {
+        console.log('Attempting registration...');
         await register(email, password, displayName);
+        console.log('Registration successful');
       } else {
+        console.log('Attempting login...');
         await login(email, password);
+        console.log('Login successful');
       }
       // Call the success callback to navigate to the app
+      console.log('Calling onLoginSuccess callback');
       if (onLoginSuccess) {
         onLoginSuccess();
       }
@@ -38,9 +44,12 @@ const Login = ({ onLoginSuccess }) => {
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
+    console.log('Google login attempted');
     try {
       await loginWithGoogle();
+      console.log('Google login successful');
       // Call the success callback to navigate to the app
+      console.log('Calling onLoginSuccess callback for Google');
       if (onLoginSuccess) {
         onLoginSuccess();
       }
