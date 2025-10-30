@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import Login from './auth/Login';
+import { useAuth } from '../../contexts/AuthContext';
+import Login from './Login';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Image, Video, ArrowLeft, DollarSign, LogOut, User, Shield, Images } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
-import ProtectedRoute from './ProtectedRoute'
+import ProtectedRoute from '../modules/auth/ProtectedRoute'
 import ImageGenerator from './ImageGenerator'
 import VideoGenerator from './VideoGenerator'
 import PricingDashboard from './PricingDashboard'
