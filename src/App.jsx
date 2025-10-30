@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
-import Login from './components/Login'
+import Login from './components/auth/Login'
 import LandingPage from './components/LandingPage'
 import AuthenticatedApp from './components/AuthenticatedApp'
 import './App.css'
