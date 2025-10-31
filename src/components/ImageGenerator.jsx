@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import { ImageIcon, Download, AlertCircle, Upload, X } from 'lucide-react'
 import runwareService from '../services/runwareService'
 import ModelRegistry from '../models/ModelRegistry'
+import creditService from '../services/creditService'
+import { useAuth } from '../contexts/AuthContext'
 
 const ImageGenerator = () => {
+  const { user } = useAuth()
   const [prompt, setPrompt] = useState('')
   const [model, setModel] = useState('FLUX.1 Kontext [pro]')
   const [aspectRatio, setAspectRatio] = useState('1:1')
@@ -16,6 +19,7 @@ const ImageGenerator = () => {
   const [generatedImage, setGeneratedImage] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState(null)
+  const [creditBalance, setCreditBalance] = useState(0)
 
   // Initialize ModelRegistry
   const [modelRegistry, setModelRegistry] = useState(null)
@@ -24,6 +28,21 @@ const ImageGenerator = () => {
     const registry = new ModelRegistry(runwareService.runware)
     setModelRegistry(registry)
   }, [])
+
+  // Load credit balance
+  useEffect(() => {
+    const loadCreditBalance = async () => {
+      if (user) {
+        try {
+          const balance = await creditService.getCreditBalance()
+          setCreditBalance(balance)
+        } catch (error) {
+          console.error('Failed to load credit balance:', error)
+        }
+      }
+    }
+    loadCreditBalance()
+  }, [user])
 
   // Initialize referenceImagePreview as array for Nanobanana, null for others
   useEffect(() => {
@@ -216,6 +235,16 @@ const ImageGenerator = () => {
   const handleGenerate = async () => {
     if (!prompt.trim() || !modelRegistry) return
     
+    // Calculate credit cost for the generation
+    const creditCost = creditService.calculateModelCostInCredits(model, sequentialImages)
+    
+    // Check if user has enough credits
+    const currentBalance = await creditService.getCreditBalance()
+    if (currentBalance < creditCost) {
+      setError(`Insufficient credits. You need ${creditCost} credits but only have ${currentBalance}. Please purchase more credits.`)
+      return
+    }
+    
     console.log('🚀 Starting image generation process...')
     setIsGenerating(true)
     setError(null)
@@ -240,9 +269,21 @@ const ImageGenerator = () => {
       if (result && result.imageURL) {
         setGeneratedImage(result.imageURL)
         console.log('🖼️ Image URL set:', result.imageURL)
+        
+        // Deduct credits for successful generation
+        await creditService.deductCredits(creditCost, `Image generation: ${model}`)
+        const newBalance = await creditService.getCreditBalance()
+        setCreditBalance(newBalance)
+        
       } else if (result && result.imageSrc) {
         setGeneratedImage(result.imageSrc)
         console.log('🖼️ Image src set:', result.imageSrc)
+        
+        // Deduct credits for successful generation
+        await creditService.deductCredits(creditCost, `Image generation: ${model}`)
+        const newBalance = await creditService.getCreditBalance()
+        setCreditBalance(newBalance)
+        
       } else {
         console.error('❌ No image URL found in result:', result)
         
@@ -581,6 +622,14 @@ const ImageGenerator = () => {
             </>
           )}
         </button>
+
+        {/* Credit Balance */}
+        <div className="text-sm bg-blue-900/30 border border-blue-500/30 p-3 rounded-lg">
+          <div className="flex justify-between items-center">
+            <span className="text-blue-300">Your Credit Balance:</span>
+            <span className="text-white font-semibold">{creditBalance} credits</span>
+          </div>
+        </div>
 
         {/* Cost Information */}
         <div className="text-sm text-gray-400 bg-gray-800 p-3 rounded-lg">

@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import { Video, Download, Play, AlertCircle, Upload, X } from 'lucide-react'
 import runwareService from '../services/runwareService'
 import ModelRegistry from '../models/ModelRegistry'
+import creditService from '../services/creditService'
+import { useAuth } from '../contexts/AuthContext'
 
 const VideoGenerator = () => {
+  const { user } = useAuth()
   const [prompt, setPrompt] = useState('')
   const [model, setModel] = useState('Seedance 1.0 Lite')
   const [duration, setDuration] = useState('5')
@@ -14,6 +17,8 @@ const VideoGenerator = () => {
   const [generationStatus, setGenerationStatus] = useState('')
   const [frameImage, setFrameImage] = useState(null)
   const [frameImagePreview, setFrameImagePreview] = useState(null)
+  const [creditBalance, setCreditBalance] = useState(0)
+  const [generateAudio, setGenerateAudio] = useState(true)
 
   // Initialize ModelRegistry
   const [modelRegistry, setModelRegistry] = useState(null)
@@ -22,6 +27,21 @@ const VideoGenerator = () => {
     const registry = new ModelRegistry(runwareService.runware)
     setModelRegistry(registry)
   }, [])
+
+  // Load credit balance
+  useEffect(() => {
+    const loadCreditBalance = async () => {
+      if (user) {
+        try {
+          const balance = await creditService.getCreditBalance()
+          setCreditBalance(balance)
+        } catch (error) {
+          console.error('Failed to load credit balance:', error)
+        }
+      }
+    }
+    loadCreditBalance()
+  }, [user])
 
   // Dynamic aspect ratios based on selected model
   const getAspectRatios = () => {
@@ -41,6 +61,12 @@ const VideoGenerator = () => {
         { label: '16:9 (Full HD - 1920×1080)', value: '16:9-fhd' },
         { label: '1:1 (Square - 512×512)', value: '1:1' },
       ]
+    } else if (model === 'Veo Fast') {
+      return [
+        { label: '16:9 (HD - 1280×720)', value: '16:9' },
+        { label: '9:16 (Portrait - 720×1280)', value: '9:16' },
+        { label: '1:1 (Square - 1080×1080)', value: '1:1' },
+      ]
     } else {
       // Default dimensions for other models
       return [
@@ -57,10 +83,14 @@ const VideoGenerator = () => {
   const models = [
     { label: 'Seedance 1.0 Lite - Supports frame images', value: 'Seedance 1.0 Lite' },
     { label: 'Minimax - Supports frame images', value: 'Minimax' },
+    { label: 'Veo Fast - Supports frame images & audio', value: 'Veo Fast' },
   ]
 
   // Check if current model supports frame images
-  const supportsFrameImages = model === 'Minimax' || model === 'Seedance 1.0 Lite'
+  const supportsFrameImages = model === 'Minimax' || model === 'Seedance 1.0 Lite' || model === 'Veo Fast'
+  
+  // Check if current model supports audio generation
+  const supportsAudio = model === 'Veo Fast'
 
   // Dynamic durations based on selected model
   const getDurations = () => {
@@ -75,6 +105,10 @@ const VideoGenerator = () => {
         { label: '5 seconds (recommended)', value: '5' },
         { label: '10 seconds', value: '10' },
         { label: '15 seconds', value: '15' },
+      ]
+    } else if (model === 'Veo Fast') {
+      return [
+        { label: '8 seconds (recommended)', value: '8' },
       ]
     } else {
       // Default durations for other models
@@ -123,6 +157,16 @@ const VideoGenerator = () => {
   const handleGenerate = async () => {
     if (!prompt.trim() || !modelRegistry) return
     
+    // Calculate credit cost for video generation (videos cost more than images)
+    const creditCost = model === 'Seedance 1.0 Lite' ? 5 : model === 'Veo Fast' ? 45 : 10 // Lite = 5 credits, Veo Fast = 45 credits, Pro = 10 credits
+    
+    // Check if user has enough credits
+    const currentBalance = await creditService.getCreditBalance()
+    if (currentBalance < creditCost) {
+      setError(`Insufficient credits. You need ${creditCost} credits but only have ${currentBalance}. Please purchase more credits.`)
+      return
+    }
+    
     setIsGenerating(true)
     setError(null)
     setGenerationStatus('Initializing video generation...')
@@ -153,6 +197,11 @@ const VideoGenerator = () => {
         params.frameImages = [{ inputImage: frameImageUUID, frame: 'first' }]
       }
       
+      // Add audio generation parameter for Veo Fast
+      if (supportsAudio) {
+        params.generateAudio = generateAudio
+      }
+      
       const result = await modelRegistry.generateVideo(
         model,
         params,
@@ -163,6 +212,12 @@ const VideoGenerator = () => {
         const videoUrl = result.videoURL || result.videoSrc || result.mediaURL
         setGeneratedVideo(videoUrl)
         setGenerationStatus('Video generated successfully!')
+        
+        // Deduct credits for successful video generation
+        await creditService.deductCredits(creditCost, `Video generation: ${model}`)
+        const newBalance = await creditService.getCreditBalance()
+        setCreditBalance(newBalance)
+        
       } else {
         throw new Error('No video URL found in response: ' + JSON.stringify(result))
       }
@@ -302,6 +357,42 @@ const VideoGenerator = () => {
               </div>
             )}
 
+            {/* Audio Generation Toggle (for supported models) */}
+            {supportsAudio && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  Audio Generation
+                  <span className="text-gray-400 text-xs ml-2">
+                    Choose whether to generate video with or without audio
+                  </span>
+                </label>
+                <div className="flex items-center space-x-4">
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="audioOption"
+                      value="true"
+                      checked={generateAudio === true}
+                      onChange={() => setGenerateAudio(true)}
+                      className="form-radio h-4 w-4 text-purple-600 focus:ring-purple-500 bg-gray-700 border-gray-600"
+                    />
+                    <span className="ml-2 text-sm text-gray-300">With Audio</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="radio"
+                      name="audioOption"
+                      value="false"
+                      checked={generateAudio === false}
+                      onChange={() => setGenerateAudio(false)}
+                      className="form-radio h-4 w-4 text-purple-600 focus:ring-purple-500 bg-gray-700 border-gray-600"
+                    />
+                    <span className="ml-2 text-sm text-gray-300">Without Audio</span>
+                  </label>
+                </div>
+              </div>
+            )}
+
             {/* Error Display */}
             {error && (
               <div className="mb-4 p-3 bg-red-900 border border-red-700 rounded-lg flex items-start">
@@ -316,6 +407,27 @@ const VideoGenerator = () => {
                 <div className="text-sm text-blue-300">{generationStatus}</div>
               </div>
             )}
+          </div>
+
+          {/* Credit Balance */}
+          <div className="mb-4 text-sm bg-blue-900/30 border border-blue-500/30 p-3 rounded-lg">
+            <div className="flex justify-between items-center">
+              <span className="text-blue-300">Your Credit Balance:</span>
+              <span className="text-white font-semibold">{creditBalance} credits</span>
+            </div>
+          </div>
+
+          {/* Cost Information */}
+          <div className="mb-6 text-sm text-gray-400 bg-gray-800 p-3 rounded-lg">
+            Cost: {model === 'Seedance 1.0 Lite' ? '5' : model === 'Veo Fast' ? '45' : '10'} credits per video
+            <div className="text-xs mt-1 text-purple-400">
+              {model === 'Seedance 1.0 Lite' ? 
+                '💜 Lite model - Faster generation with good quality' : 
+                model === 'Veo Fast' ? 
+                '🔊 Veo Fast - Google\'s advanced model with audio support' :
+                '🚀 Pro model - Premium quality with advanced features'
+              }
+            </div>
           </div>
 
           {/* Generate Button */}

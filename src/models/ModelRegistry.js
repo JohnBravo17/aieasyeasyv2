@@ -11,6 +11,7 @@ import SampleImageModel from './imageModules/SampleImageModel.js'
 
 import Seedance1LiteModel from './videoModules/Seedance1LiteModel.js'
 import MinimaxHailu02Model from './videoModules/MinimaxHailu02Model.js'
+import VeoFastModel from './videoModules/VeoFastModel.js'
 
 // Import services for multi-user support
 import userService from '../services/userService.js'
@@ -80,6 +81,8 @@ class ModelRegistry {
   this.registerVideoModel('Seedance 1.0 Lite', new Seedance1LiteModel(this.runware))
   // Minimax (Hailu 02) — registered under the UI name 'Minimax'
   this.registerVideoModel('Minimax', new MinimaxHailu02Model(this.runware))
+  // Veo Fast — Google's text-to-video and image-to-video model with audio support
+  this.registerVideoModel('Veo Fast', new VeoFastModel(this.runware))
     
     console.log(`✅ Model registry initialized with ${this.imageModels.size} image models and ${this.videoModels.size} video models`)
   }

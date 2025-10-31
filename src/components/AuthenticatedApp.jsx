@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Image, Video, ArrowLeft, DollarSign, LogOut, User, Shield, Images } from 'lucide-react'
+import { Image, Video, ArrowLeft, DollarSign, LogOut, User, Shield, Images, CreditCard } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import ProtectedRoute from '../modules/auth/ProtectedRoute'
 import ImageGenerator from './ImageGenerator'
@@ -8,6 +8,7 @@ import PricingDashboard from './PricingDashboard'
 import AdminDashboard from './admin/AdminDashboard'
 import UserGallery from './UserGallery'
 import HeroHomepage from './HeroHomepage'
+import CreditDashboard from './CreditDashboard'
 import '../App.css'
 
 function AuthenticatedApp({ onLogout }) {
@@ -50,7 +51,7 @@ function AuthenticatedApp({ onLogout }) {
         }}
         onNavigateToGallery={() => setActiveView('gallery')}
         onNavigateToSettings={() => {
-          setActiveTab('pricing')
+          setActiveTab('credits')
           setActiveView('settings')
         }}
         onLogout={handleLogout}
@@ -130,6 +131,17 @@ function AuthenticatedApp({ onLogout }) {
           {activeView === 'settings' && (
             <div className="flex gap-4 mb-8">
               <button
+                onClick={() => setActiveTab('credits')}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
+                  activeTab === 'credits'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                <CreditCard size={20} />
+                Credits
+              </button>
+              <button
                 onClick={() => setActiveTab('pricing')}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                   activeTab === 'pricing'
@@ -160,6 +172,7 @@ function AuthenticatedApp({ onLogout }) {
           {activeView === 'generator' && activeTab === 'image' && <ImageGenerator />}
           {activeView === 'generator' && activeTab === 'video' && <VideoGenerator />}
           {activeView === 'gallery' && <UserGallery onNavigateHome={() => setActiveView('home')} />}
+          {activeView === 'settings' && activeTab === 'credits' && <CreditDashboard />}
           {activeView === 'settings' && activeTab === 'pricing' && <PricingDashboard />}
           {activeView === 'settings' && activeTab === 'admin' && isAdmin && <AdminDashboard />}
         </main>

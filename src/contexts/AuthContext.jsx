@@ -11,6 +11,8 @@ import {
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../services/firebaseConfig';
 import userService from '../services/userService';
+import creditService from '../services/creditService';
+import '../services/adminService'; // Import for console utilities
 
 const AuthContext = createContext();
 
@@ -31,6 +33,16 @@ export const AuthProvider = ({ children }) => {
   // Google provider for social login
   const googleProvider = new GoogleAuthProvider();
 
+  // Check if email belongs to an admin user
+  const isAdminEmail = (email) => {
+    const adminEmails = [
+      'admin@example.com',
+      'johnny@example.com',
+      // Add more admin emails here as needed
+    ];
+    return adminEmails.includes(email?.toLowerCase());
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -48,10 +60,14 @@ export const AuthProvider = ({ children }) => {
         
         // Set user in userService for Firestore operations
         userService.setCurrentUser(userData);
+        
+        // Set user in creditService for credit operations
+        creditService.setCurrentUser(userData);
       } else {
         // User is signed out
         setUser(null);
         userService.setCurrentUser(null);
+        creditService.setCurrentUser(null);
       }
       setLoading(false);
     });
@@ -78,6 +94,11 @@ export const AuthProvider = ({ children }) => {
           totalSpent: 0,
           totalCosts: 0, // What we pay to Runware
           
+          // Credit System
+          creditBalance: 10, // Starting credits for new users
+          totalCreditsEver: 10, // Lifetime credits purchased
+          totalSpentCredits: 0, // Lifetime credits used
+          
           // Storage Plan
           storagePlan: {
             type: 'free', // 'free', 'basic', 'premium', 'unlimited'
@@ -87,8 +108,8 @@ export const AuthProvider = ({ children }) => {
             autoRenew: false
           },
           
-          // Admin role
-          role: 'user', // 'user' or 'admin'
+          // Admin role - check if email is in admin list
+          role: isAdminEmail(userData.email) ? 'admin' : 'user', // 'user' or 'admin'
           
           // Timestamps
           createdAt: new Date().toISOString(),
@@ -98,10 +119,20 @@ export const AuthProvider = ({ children }) => {
         await setDoc(userRef, newUserData);
         console.log('✅ New user document created:', newUserData);
       } else {
-        // Update last login
-        await setDoc(userRef, { 
+        // Update last login and check if user should be admin
+        const currentData = userSnap.data();
+        const shouldBeAdmin = isAdminEmail(userData.email);
+        const updateData = { 
           lastLogin: new Date().toISOString() 
-        }, { merge: true });
+        };
+        
+        // Update role if needed
+        if (shouldBeAdmin && currentData.role !== 'admin') {
+          updateData.role = 'admin';
+          console.log('🔴 Upgrading user to admin:', userData.email);
+        }
+        
+        await setDoc(userRef, updateData, { merge: true });
       }
     } catch (error) {
       console.error('Error ensuring user document:', error);
